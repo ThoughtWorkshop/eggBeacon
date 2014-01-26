@@ -1,7 +1,6 @@
 .DS_Store
 nrf51_sdk_*
 s110_nrf51822_*
-nrf51-pure-gcc-setup
 _build
 *.jlink
 JLink.log
