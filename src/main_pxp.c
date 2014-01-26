@@ -60,74 +60,29 @@ static uint8_t clbeacon_info[APP_CLBEACON_INFO_LENGTH] =                /**< Inf
                          // this implementation. 
 };
 
-/**@brief Function for error handling, which is called when an error has occurred.
- *
- * @warning This handler is an example only and does not fit a final product. You need to analyze
- *          how your product is supposed to react in case of error.
- *
- * @param[in] error_code  Error code supplied to the handler.
- * @param[in] line_num    Line number where the handler is called.
- * @param[in] p_file_name Pointer to the file name.
- */
 void app_error_handler(uint32_t error_code, uint32_t line_num, const uint8_t * p_file_name)
 {
     nrf_gpio_pin_clear(ASSERT_LED_PIN_NO);
 
-    // This call can be used for debug purposes during application development.
-    // @note CAUTION: Activating this code will write the stack to flash on an error.
-    //                This function should NOT be used in a final product.
-    //                It is intended STRICTLY for development/debugging purposes.
-    //                The flash write will happen EVEN if the radio is active, thus interrupting
-    //                any communication.
-    //                Use with care. Un-comment the line below to use.
-    // ble_debug_assert_handler(error_code, line_num, p_file_name);
-
-    // On assert, the system can only recover on reset.
     NVIC_SystemReset();
 }
 
-
-/**@brief Callback function for asserts in the SoftDevice.
- *
- * @details This function will be called in case of an assert in the SoftDevice.
- *
- * @warning This handler is an example only and does not fit a final product. You need to analyze
- *          how your product is supposed to react in case of Assert.
- * @warning On assert from the SoftDevice, the system can only recover on reset.
- *
- * @param[in]   line_num   Line number of the failing ASSERT call.
- * @param[in]   file_name  File name of the failing ASSERT call.
- */
 void assert_nrf_callback(uint16_t line_num, const uint8_t * p_file_name)
 {
     app_error_handler(DEAD_BEEF, line_num, p_file_name);
 }
 
-
-/**@brief Function for the LEDs initialization.
- *
- * @details Initializes all LEDs used by this application.
- */
 static void leds_init(void)
 {
     nrf_gpio_cfg_output(PIN_RED_LED);
     nrf_gpio_cfg_output(PIN_GREEN_LED);
     nrf_gpio_cfg_output(PIN_BLUE_LED);
 
-    nrf_gpio_cfg_output(ADVERTISING_LED_PIN_NO);
-    nrf_gpio_cfg_output(ASSERT_LED_PIN_NO);    
-
     nrf_gpio_pin_set(PIN_RED_LED);
     nrf_gpio_pin_set(PIN_GREEN_LED);
     nrf_gpio_pin_set(PIN_BLUE_LED);
 }
 
-
-/**@brief Function for initializing the Advertising functionality.
- *
- * @details Encodes the required advertising data and passes it to the stack.
- *          Also builds a structure to be passed to the stack when starting advertising.
- */
 static void advertising_init(void)
 {
     uint32_t        err_code;
@@ -160,9 +115,6 @@ static void advertising_init(void)
     m_adv_params.timeout     = APP_CFG_NON_CONN_ADV_TIMEOUT;
 }
 
-
-/**@brief Function for starting advertising.
- */
 static void advertising_start(void)
 {
     uint32_t err_code;
@@ -173,29 +125,18 @@ static void advertising_start(void)
     nrf_gpio_pin_clear(ADVERTISING_LED_PIN_NO);
 }
 
-
-/**@brief Function for initializing the BLE stack.
- *
- * @details Initializes the SoftDevice and the BLE event interrupt.
- */
 static void ble_stack_init(void)
 {
     // Initialize the SoftDevice handler module.
     SOFTDEVICE_HANDLER_INIT(NRF_CLOCK_LFCLKSRC_SYNTH_250_PPM, false);
 }
 
-
-/**@brief Function for the Power manager.
- */
 static void power_manage(void)
 {
     uint32_t err_code = sd_app_evt_wait();
     APP_ERROR_CHECK(err_code);
 }
 
-/**
- * @brief Function for application main entry.
- */
 int main(void)
 {
     // Initialize.
@@ -207,7 +148,6 @@ int main(void)
 
     // Start execution.
     advertising_start();
-
 
     // Enter main loop.
     for (;;)
